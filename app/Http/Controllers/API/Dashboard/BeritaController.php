@@ -98,19 +98,28 @@ class BeritaController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->judul);
-        $data['user_name'] = auth()->user()->nama;
+        $data = [
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'slug' => Str::slug($request->judul),
+            'user_name' => auth()->user()->nama,
+        ];
 
-        if ($request->hasFile('gambar')) {
+        // Update gambar hanya jika ada file yang diunggah
+        if ($request->File('gambar')) {
+            // Hapus gambar lama dari penyimpanan
             Storage::delete('public/' . $berita->gambar);
+
+            // Simpan gambar baru dan simpan path-nya ke dalam data
             $data['gambar'] = $request->file('gambar')->store('berita', 'public');
         }
 
+        // Lakukan pembaruan data
         $berita->update($data);
 
         return response()->json($berita, 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

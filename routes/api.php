@@ -61,7 +61,7 @@ Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
     Route::get('/galeri', [GaleriController::class, 'index']);
     Route::get('/galeri/{id}', [GaleriController::class, 'show']);
     Route::post('/galeri', [GaleriController::class, 'store']);
-    Route::put('/galeri/{galeri}', [GaleriController::class, 'update']); //masih error
+    Route::post('/galeri/{galeri}', [GaleriController::class, 'update']); //masih error
     Route::delete('/galeri/{galeri}', [GaleriController::class, 'destroy']);
 });
 
@@ -92,12 +92,11 @@ Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
 });
 
 //Pengajuan surat
-// Route::group(['middleware' => ['jwt.auth']], function () {
-//     Route::resource('/pengajuan-surat', [PengajuanSuratController::class]);
-//     Route::get('/pengajuan-surat/{pengajuan_surat}/download', [PengajuanSuratController::class, 'download']);
-// });
-// Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
-//     Route::put('/pengajuan-surat/{pengajuan_surat}/approve', [PengajuanSuratController::class, 'approve']);
-//     Route::put('/pengajuan-surat/{pengajuan_surat}/reject', [PengajuanSuratController::class, 'reject']);
-//     Route::get('/pengajuan-surat/{pengajuan_surat}/preview', [PengajuanSuratController::class, 'preview']);
-// });
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::resource('/pengajuan-surat', PengajuanSuratController::class);
+    Route::post('/pengajuan-surat/{}', [PengajuanSuratController::class, 'update']);
+    Route::get('/pengajuan-surat/{pengajuan_surat}/download', [PengajuanSuratController::class, 'download']);
+    Route::put('/pengajuan-surat/{id}/approve', [PengajuanSuratController::class, 'approve']);
+    Route::put('/pengajuan-surat/{id}/reject', [PengajuanSuratController::class, 'reject']);
+    Route::get('/pengajuan-surat/{pengajuan_surat}/preview', [PengajuanSuratController::class, 'preview']);
+});
