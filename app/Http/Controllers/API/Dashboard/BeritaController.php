@@ -117,7 +117,10 @@ class BeritaController extends Controller
         // Lakukan pembaruan data
         $berita->update($data);
 
-        return response()->json($berita, 200);
+        return response()->json([
+            'message' => 'Berhasil mengubah berita',
+            'berita' => $berita,
+        ], 200);
     }
 
 

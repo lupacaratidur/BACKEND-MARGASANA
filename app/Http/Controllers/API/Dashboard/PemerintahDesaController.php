@@ -58,27 +58,27 @@ class PemerintahDesaController extends Controller
             'nama' => 'required',
             'jabatan' => 'required',
         ]);
-        // dd($request);
-        // if ($request->hasFile('foto')) {
-        //     // Menghapus foto lama jika ada
-        //     if ($pemerintah_desa->foto) {
-        //         Storage::delete('public/' . $pemerintah_desa->foto);
-        //     }
 
-        //     // Menyimpan foto baru
-        //     $foto = $request->file('foto')->store('pemerintah_desa', 'public');
-        // } else {
-        //     // Jika tidak ada foto yang diunggah, gunakan foto yang sudah ada
-        //     $foto = $pemerintah_desa->foto;
-        // }
+        if ($request->hasFile('foto')) {
+            // Menghapus foto lama jika ada
+            if ($pemerintah_desa->foto) {
+                Storage::delete('public/' . $pemerintah_desa->foto);
+            }
 
-        // $pemerintah_desa->update([
-        //     'foto' => $foto,
-        //     'nama' => $request->nama,
-        //     'jabatan' => $request->jabatan,
-        // ]);
+            // Menyimpan foto baru
+            $foto = $request->file('foto')->store('pemerintah_desa', 'public');
+        } else {
+            // Jika tidak ada foto yang diunggah, gunakan foto yang sudah ada
+            $foto = $pemerintah_desa->foto;
+        }
 
-        // return response()->json($pemerintah_desa, 201);
+        $pemerintah_desa->update([
+            'foto' => $foto,
+            'nama' => $request->nama,
+            'jabatan' => $request->jabatan,
+        ]);
+
+        return response()->json($pemerintah_desa, 201);
     }
 
 

@@ -135,7 +135,10 @@ class GaleriController extends Controller
 
         $galeri->save();
 
-        return response()->json(['message' => 'Berhasil mengubah data'], 200);
+        return response()->json([
+            'message' => 'Berhasil mengubah data',
+            'galeri'=> $galeri,
+    ], 200);
     }
 
     /**
