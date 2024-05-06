@@ -17,7 +17,7 @@ class PemerintahDesaController extends Controller
     public function index()
     {
         $pemerintah_desa = PemerintahDesa::all();
-        return response()->json($pemerintah_desa, 200);
+        return response()->json($pemerintah_desa);
     }
 
     /**

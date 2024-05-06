@@ -25,12 +25,7 @@ class BeritaController extends Controller
         return response()->json($berita);
     }
 
-    public function create()
-    {
-        return view('berita.create', [
-            'title' => 'Tambah Berita',
-        ]);
-    }
+
 
     public function edit($id)
     {
@@ -76,6 +71,7 @@ class BeritaController extends Controller
             $data['gambar'] = $request->file('gambar')->store('berita', 'public');
 
             $berita = Berita::create($data);
+
 
             return response()->json($berita, 201);
         } else {

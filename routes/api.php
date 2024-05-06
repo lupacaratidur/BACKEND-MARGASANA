@@ -58,20 +58,20 @@ Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
 
 //Galeri
 Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
-    Route::get('/galeri', [GaleriController::class, 'index']);
-    Route::get('/galeri/{id}', [GaleriController::class, 'show']);
-    Route::post('/galeri', [GaleriController::class, 'store']);
-    Route::post('/galeri/{id}', [GaleriController::class, 'update']); //masih error
-    Route::delete('/galeri/{galeri}', [GaleriController::class, 'destroy']);
+    Route::get('galeri', [GaleriController::class, 'index']);
+    Route::get('galeri/{id}', [GaleriController::class, 'show']);
+    Route::post('galeri', [GaleriController::class, 'store']);
+    Route::post('galeri/{id}', [GaleriController::class, 'update']); //masih error
+    Route::delete('galeri/{galeri}', [GaleriController::class, 'destroy']);
 });
 
 //Pemerintah Desa
 Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
-    Route::get('/pemerintah_desa', [PemerintahDesaController::class, 'index']);
-    Route::get('/pemerintah_desa/{id}', [PemerintahDesaController::class, 'show']);
-    Route::post('/pemerintah_desa', [PemerintahDesaController::class, 'store']);
-    Route::post('/pemerintah_desa/{pemerintah_desa}', [PemerintahDesaController::class, 'update']); //masih error
-    Route::delete('/pemerintah_desa/{pemerintah_desa}', [PemerintahDesaController::class, 'destroy']);
+    Route::get('pemerintah_desa', [PemerintahDesaController::class, 'index']);
+    Route::get('pemerintah_desa/{id}', [PemerintahDesaController::class, 'show']);
+    Route::post('pemerintah_desa', [PemerintahDesaController::class, 'store']);
+    Route::post('pemerintah_desa/{pemerintah_desa}', [PemerintahDesaController::class, 'update']); //masih error
+    Route::delete('pemerintah_desa/{pemerintah_desa}', [PemerintahDesaController::class, 'destroy']);
 });
 
 //Pengaduan masyarakat
