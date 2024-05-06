@@ -26,7 +26,6 @@ class BeritaController extends Controller
     }
 
 
-
     public function edit($id)
     {
         $berita = Berita::find($id);

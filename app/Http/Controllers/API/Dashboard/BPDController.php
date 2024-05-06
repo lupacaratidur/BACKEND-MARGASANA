@@ -99,6 +99,7 @@ class BPDController extends Controller
             ], 404);
         }
 
+
         $bpd->nama = $request->input('nama');
         $bpd->jabatan = $request->input('jabatan');
         $bpd->save();

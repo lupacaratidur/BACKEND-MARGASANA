@@ -74,6 +74,7 @@ Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
     Route::delete('pemerintah_desa/{pemerintah_desa}', [PemerintahDesaController::class, 'destroy']);
 });
 
+
 //Pengaduan masyarakat
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/pengaduan/semua', [PengaduanController::class, 'index']);
