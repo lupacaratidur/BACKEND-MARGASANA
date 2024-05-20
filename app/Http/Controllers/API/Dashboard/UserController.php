@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return view('pengguna/index', [
+        return response()->json([
             'title' => 'Data Pengguna',
             'page'  => 'pengguna',
             'users' => User::all(),
@@ -20,17 +22,16 @@ class UserController extends Controller
 
     public function masyarakat()
     {
-        return view('pengguna/index', [
+        return response()->json([
             'title' => 'Data Masyarakat',
             'page'  => 'masyarakat',
             'users' => User::where('level', 'masyarakat')->get(),
-
         ]);
     }
 
     public function petugas()
     {
-        return view('pengguna/index', [
+        return response()->json([
             'title' => 'Data Petugas',
             'page'  => 'petugas',
             'users' => User::where('level', '!=', 'masyarakat')->get(),
@@ -51,7 +52,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'username' => 'required|min:6|unique:users',
             'nama' => 'required',
             'telepon' => 'required|min:11',
@@ -59,47 +60,90 @@ class UserController extends Controller
             'level' => 'required',
         ]);
 
-        if (!$validated) {
-            return redirect()->back()->with('gagal', 'Gagal menambahkan petugas!');
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan pengguna!',
+                'errors' => $validator->errors(),
+            ], 400);
         }
 
-        $validated['password'] = bcrypt($validated['password']);
-        $berhasil = User::create($validated);
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
+
+        $berhasil = User::create($data);
+
         if ($berhasil) {
-            return redirect('pengguna/petugas')->with('berhasil', 'Berhasil menambahkan petugas!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menambahkan pengguna!',
+                'data' => $berhasil,
+            ], 201);
         } else {
-            return redirect()->back()->with('gagal', 'Gagal menambahkan petugas!');
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan pengguna!',
+            ], 500);
         }
     }
 
     public function update(Request $request, User $pengguna)
     {
-        $validated = $request->validate([
-            'username' => 'required|min:6|unique:users,username,' . $pengguna->id . ',id',
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|min:6|unique:users,username,' . $pengguna->id,
             'nama' => 'required',
             'telepon' => 'required|min:11',
             'level' => 'required',
         ]);
 
-        if (!$validated) {
-            return redirect()->back()->with('gagal', 'Gagal mengedit pengguna!');
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengedit pengguna!',
+                'errors' => $validator->errors(),
+            ], 400);
         }
 
-        $berhasil = $pengguna->update($validated);
+        $data = $request->only(['username', 'nama', 'telepon', 'level']);
+
+        $berhasil = $pengguna->update($data);
+
         if ($berhasil) {
-            return redirect()->back()->with('berhasil', 'Berhasil mengedit pengguna!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mengedit pengguna!',
+                'data' => $pengguna,
+            ], 200);
         } else {
-            return redirect()->back()->with('gagal', 'Gagal mengedit pengguna!');
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengedit pengguna!',
+            ], 500);
         }
     }
 
 
-    public function destroy(User $user, $id)
+    public function destroy($id)
     {
-        if (User::destroy($id)) {
-            return redirect()->back()->with('berhasil', 'Berhasil menghapus pengguna!');
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna tidak ditemukan!',
+            ], 404);
+        }
+
+        if ($user->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menghapus pengguna!',
+            ], 200);
         } else {
-            return redirect()->back()->with('gagal', 'Gagal menghapus pengguna!');
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus pengguna!',
+            ], 500);
         }
     }
 }

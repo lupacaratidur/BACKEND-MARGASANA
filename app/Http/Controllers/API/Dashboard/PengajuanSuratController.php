@@ -84,7 +84,7 @@ class PengajuanSuratController extends Controller
                     'alamat' => 'required',
                     'keperluan' => 'required',
                     'keterangan_surat' => 'required',
-                    'foto_ktp' => 'nullable|image|max:2048'
+                    //'foto_ktp' => 'nullable|image|max:2048'
                 ]);
                 $data = $request->except('_token');
                 $data['jenis_surat'] = 'Surat Keterangan';
@@ -323,6 +323,9 @@ class PengajuanSuratController extends Controller
 
             $response['message'] = 'Berhasil membuat pengajuan surat';
             $response['status'] = 'success';
+            $response['jenis_surat'] = $data['jenis_surat'];
+            $response['surat'] = $data;
+            $response['foto_ktp'] = $foto_ktp;
         } catch (\Exception $e) {
             $response['message'] = 'Gagal membuat pengajuan surat';
             $response['status'] = 'error';

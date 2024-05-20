@@ -11,7 +11,7 @@ class TanggapanController extends Controller
 {
     public function index()
     {
-        return view('tanggapan/index', [
+        return response()->json([
             'title' => 'Semua Tanggapan',
             'tanggapan' => Tanggapan::all()
         ]);

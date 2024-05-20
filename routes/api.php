@@ -12,6 +12,7 @@ use App\Http\Controllers\API\Dashboard\PemerintahDesaController;
 use App\Http\Controllers\API\Dashboard\PengaduanController;
 use App\Http\Controllers\API\Dashboard\PengajuanSuratController;
 use App\Http\Controllers\API\Dashboard\TanggapanController;
+use App\Http\Controllers\API\Dashboard\UserController;
 use App\Models\PemerintahDesa;
 
 /*
@@ -77,27 +78,38 @@ Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
 
 //Pengaduan masyarakat
 Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::get('/pengaduan/semua', [PengaduanController::class, 'index']);
-    Route::get('/pengaduan/belum', [PengaduanController::class, 'belum']);
-    Route::get('/pengaduan/proses', [PengaduanController::class, 'proses']);
-    Route::get('/pengaduan/selesai', [PengaduanController::class, 'selesai']);
-    Route::post('/pengaduan', [PengaduanController::class, 'store']);
-    Route::put('/pengaduan/{pengaduan}', [PengaduanController::class, 'update']);
-    Route::delete('/pengaduan/{pengaduan}', [PengaduanController::class, 'destroy']);
-    Route::post('/pengaduan/response/{pengaduan}', [PengaduanController::class, 'response']);
+    Route::get('pengaduan/semua', [PengaduanController::class, 'index']);
+    Route::get('pengaduan/belum', [PengaduanController::class, 'belum']);
+    Route::get('pengaduan/proses', [PengaduanController::class, 'proses']);
+    Route::get('pengaduan/selesai', [PengaduanController::class, 'selesai']);
+    Route::post('pengaduan', [PengaduanController::class, 'store']);
+    Route::post('pengaduan/{pengaduan}', [PengaduanController::class, 'update']);
+    Route::delete('pengaduan/{pengaduan}', [PengaduanController::class, 'destroy']);
+    Route::post('pengaduan/response/{pengaduan}', [PengaduanController::class, 'response']);
 });
 
 //Tanggapan Petugas/Admin
 Route::group(['middleware' => ['jwt.auth', 'PetugasAdmin']], function () {
     Route::delete('/tanggapan/{tanggapan}', [TanggapanController::class, 'destroy']);
+    Route::get('/tanggapan', [TanggapanController::class, 'index']);
 });
 
 //Pengajuan surat
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::resource('/pengajuan-surat', PengajuanSuratController::class);
-    Route::post('/pengajuan-surat/{}', [PengajuanSuratController::class, 'update']);
+    Route::post('/pengajuan-surat/{pengajuanSurat}', [PengajuanSuratController::class, 'update']);
     Route::get('/pengajuan-surat/{pengajuan_surat}/download', [PengajuanSuratController::class, 'download']);
     Route::put('/pengajuan-surat/{id}/approve', [PengajuanSuratController::class, 'approve']);
     Route::put('/pengajuan-surat/{id}/reject', [PengajuanSuratController::class, 'reject']);
     Route::get('/pengajuan-surat/{pengajuan_surat}/preview', [PengajuanSuratController::class, 'preview']);
+});
+
+//DATA USER
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/masyarakat', [UserController::class, 'masyarakat']);
+    Route::get('/user/petugas', [UserController::class, 'petugas']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::put('/user/{pengguna}', [UserController::class, 'update']);
+    Route::delete('/user/{pengguna}', [UserController::class, 'destroy']);
 });

@@ -19,7 +19,7 @@ class GaleriController extends Controller
      */
     public function index(Request $request)
     {
-        $galeri = Galeri::paginate(10);
+        $galeri = Galeri::orderBy('created_at', 'desc')->paginate(10);
         return response()->json($galeri, 200);
     }
 
@@ -137,8 +137,8 @@ class GaleriController extends Controller
 
         return response()->json([
             'message' => 'Berhasil mengubah data',
-            'galeri'=> $galeri,
-    ], 200);
+            'galeri' => $galeri,
+        ], 200);
     }
 
     /**

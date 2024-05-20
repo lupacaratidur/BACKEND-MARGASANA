@@ -23,10 +23,18 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|min:6|unique:users',
-            'nama' => 'required',
-            'telepon' => 'required|min:11',
+            'nama' => 'required|unique:users',
+            'telepon' => 'required|min:11|unique:users',
             'password' => 'required|min:6',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mendaftarkan akun',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
         $user = User::create([
             'username' => $request->username,
@@ -47,6 +55,7 @@ class AuthController extends Controller
             ]
         ]);
     }
+
 
     public function login(Request $request)
     {

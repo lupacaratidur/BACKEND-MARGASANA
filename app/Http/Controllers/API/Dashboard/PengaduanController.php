@@ -14,17 +14,12 @@ use Illuminate\Support\Facades\Gate;
 
 class PengaduanController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        if (Auth::user()->level == 'masyarakat') {
-            $pengaduan = Pengaduan::where('masyarakat_id', Auth::user()->id)->get();
-        } else {
-            $pengaduan = Pengaduan::all();
-        }
-
+        $pengaduan = Pengaduan::orderBy('created_at', 'desc')->paginate(10);
         return response()->json([
             'title' => 'Semua Pengaduan',
-            'pengaduan' => $pengaduan
+            'pengaduan' => $pengaduan,
         ]);
     }
 
